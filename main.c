@@ -1,11 +1,8 @@
 /*
-
 Comp 166
 Lab 3
 Nicolai Kocher
 Jan 29, 2022
-
-
 */
 
 #include <stdio.h>
