@@ -2,7 +2,7 @@
 Comp 166
 Lab 3
 Nicolai Kocher
-Jan 29, 2022
+Feb 09, 2022
 */
 
 #include <stdio.h>
@@ -10,7 +10,7 @@ Jan 29, 2022
 #include <math.h>
 
 double density(double height) {
-        const double p0 = 101.325e3;    // sea-level standard atmospheric presure
+        const double p0 = 101.325e3;    // sea-level standard atmospheric pressure
         const double T0 = 288.15;       // sea-level standard temperature
         const double g = 9.80665;       // (m/s^2) earth-surface gravitational acceleration
         const double L = 0.0065;        // temperature lapse rate
@@ -25,46 +25,46 @@ double density(double height) {
 int main() {
 
     //Variables
-    double mass, height, crossSection, timeStep;
+    double mass, height, dragCoeificient, crossSection, timeStep;
     const double g = 9.80665;
-    double velocity, acceleration;
-    long dragCoeificient;
 
-    //prompt for height
+    //prompt for height in meters
     printf("Enter Height of the object in meters:");
-    scanf("%ld", height);
+    scanf("%lf", &height);
 
     //prompt for mass
     printf("Enter Mass of the object:");
-    scanf("%lf", mass);
+    scanf("%lf", &mass);
 
     //prompt for drag coeificient
     printf("Enter Drag coeificient:");
-    scanf("%ld", dragCoeificient);
+    scanf("%lf", &dragCoeificient);
 
     //prompt for cross-sectional area of object
     printf("Enter Cross-Sectional area of object:");
-    scanf("%lf", crossSection);
+    scanf("%lf", &crossSection);
 
     //prompt for time-step size
     printf("Enter Time Step:");
-    scanf("%lf", timeStep);
+    scanf("%lf", &timeStep);
 
-    long time = 0;
-    acceleration = 0;
-    velocity = 0;
-    printf("Time   Height   Velocity\n");
-    for (int base = 0; base>100000; base++)
-    {
-        long time = base*timeStep;
-        printf("%4.2ld  %8.2lf   %8.2lf\n", time, height, velocity);
+    double time = 0;
+    double acceleration = 0;
+    double velocity = 0;
+    printf("Time    Height    Velocity\n");
+    for (int base = 0; base<100000 && height>0.0; base++){
+        double time = base*timeStep;
+        printf("%4.2lf  %8.2lf   %8.2lf\n", time, height, velocity);
         double Fg = mass*g;
-        double Fa = -0.5*(dragCoeificient*density(height)*acceleration*pow(velocity));
+        double Fa = -0.5*dragCoeificient*density(height)*crossSection*pow(velocity,2);
         double Fnet = Fa + Fg;
+        acceleration = Fnet/mass;
         velocity = velocity + (acceleration * timeStep);
-        height = height - ((1/2)*velocity*pow(timeStep));
+        height = height - velocity*timeStep;
     }
+    double terminalVelocity;
+    terminalVelocity = sqrt((2*mass*g)/(0.5*density(0.0)*crossSection)); 
+    printf("Terminal Velocity: %0.2lf", terminalVelocity);
 
-
-    return("EXIT_SUCCESS");
+    return(EXIT_SUCCESS);
 }
